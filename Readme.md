@@ -1,8 +1,9 @@
 # App Display Page
 
-This is a simple PHP script that you can 
-modify and insert your iOS's applicaiton id.
-It will spit out some basic HTML that you can
+This is a simple PHP script paired with a 
+Wordpress plugin that you can modify to fit
+your own needs. Use your iOS's applicaiton id
+and it will spit out some basic HTML that you can
 then apply your own styling to.
 
 # Why?
@@ -12,3 +13,16 @@ descriptions and current pricing information
 for all my apps wherever I display this data
 on my personal websites. This was the natural
 thing to do.
+
+# How to use:
+
+* Clone or download the repos.
+* Upload the folder 'app-display-page' to your Wordpress installation's plugins folder.
+* Log into Wordpress and activate the plugin.
+* In any post or page, insert the following shortcode: [ios-app id="1234"] (where "1234" is your application's App Store ID)
+* Save the page and check out the result!
+
+This plugin will cache the data from your application
+in the Wordpress database for 24 hours, however, the
+application icon and screenshots are pulled directly
+from apple's CDN servers.
