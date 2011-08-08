@@ -43,7 +43,11 @@ $app = $json_data->results[0];
 
 	
 	<div class="app-purchase">
+		<?php if($app->price == 0) { ?>
+		Free!<br />
+		<?php } else { ?>
 		<?php echo $app->currency; ?> <?php echo $app->price; ?><br />
+		<?php } ?>
 		<a href="<?php echo $app->trackViewUrl ;?>">Buy Now!</a>
 	</div>
 

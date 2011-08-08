@@ -10,7 +10,7 @@
 
 define('IOS_DISPLAY_PAGE_APPSTORE_URL', 'http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/wa/wsLookup?id=');
 define('IOS_DISPLAY_PAGE_ICON_SIZE', 175);
-define('IOS_DISPLAY_PAGE_IMAGE_SIZE', 200);
+define('IOS_DISPLAY_PAGE_IMAGE_SIZE', 120);
 
 add_shortcode('ios-app', 'ios_display_page_shortcode');
 add_action('wp_print_styles', 'ios_display_page_add_stylesheet');
@@ -66,7 +66,6 @@ function ios_display_page_output($app) {
 	<img class="app-icon" src="<?php echo $app->artworkUrl100; ?>" width="<?php echo IOS_DISPLAY_PAGE_ICON_SIZE; ?>" height="<?php echo IOS_DISPLAY_PAGE_ICON_SIZE; ?>" />
 	
 	<h1 class="app-title"><?php echo $app->trackName; ?><span class="app-version"> <?php echo $app->version; ?></span></h1>
-	<h2 class="app-artist">By <a href="<?php echo $app->sellerUrl; ?>"><?php echo $app->artistName; ?></a></h2>
 
 	<div class="app-rating">
 		Rated <?php echo $app->averageUserRating; ?> out of 5 by <?php echo $app->userRatingCount; ?> users.
@@ -74,27 +73,33 @@ function ios_display_page_output($app) {
 
 	
 	<div class="app-purchase">
-		<?php echo $app->currency; ?> <?php echo $app->price; ?><br />
-		<a href="<?php echo $app->trackViewUrl ;?>">Buy Now!</a>
+		<?php if($app->price == 0) { ?>
+		Free!<br />
+		<?php } else { ?>
+		Only $<?php echo $app->price; ?>!<br />
+		<?php } ?>
+		<a href="<?php echo $app->trackViewUrl ;?>">
+			<img src="http://ax.phobos.apple.com.edgesuite.net/images/web/linkmaker/badge_appstore-lrg.gif" alt="App Store" style="border: 0;"/>
+		</a>
 	</div>
 
 	<div class="app-releasenotes">
-		<h3>Latest Release Notes:</h3>
+		<h2>Latest Release Notes:</h2>
 		<?php echo nl2br($app->releaseNotes); ?>
 	</div>
 
 	<div class="app-description">
-		<h3>Description:</h3>
+		<h2>Description:</h2>
 		<?php echo nl2br($app->description); ?>
 	</div>
 
 	<?php if(count($app->screenshotUrls) > 0) { ?>
 	<div class="app-screenshots-iphone">
-		<h3>iPhone Screenshots:</h3>
+		<h2>iPhone Screenshots:</h2>
 		<ul class="app-screenshots">
 		<?php
 		foreach($app->screenshotUrls as $ssurl) {
-			echo '<li class="app-screenshot"><img src="' . $ssurl . '" width="' . IOS_DISPLAY_PAGE_IMAGE_SIZE . '" /></li>';
+			echo '<li class="app-screenshot"><a href="' . $ssurl . '" alt="Full Size Screenshot"><img src="' . $ssurl . '" width="' . IOS_DISPLAY_PAGE_IMAGE_SIZE . '" /></a></li>';
 		}
 		?>
 	</div>	
@@ -103,11 +108,11 @@ function ios_display_page_output($app) {
 
 	<?php if(count($app->ipadScreenshotUrls) > 0) { ?>
 	<div class="app-screenshots-ipad">
-		<h3>iPad Screenshots:</h3>
+		<h2>iPad Screenshots:</h2>
 		<ul class="app-screenshots">
 		<?php
 		foreach($app->ipadScreenshotUrls as $ssurl) {
-			echo '<li class="app-screenshot"><img src="' . $ssurl . '" width="' . IOS_DISPLAY_PAGE_IMAGE_SIZE . '" /></li>';
+			echo '<li class="app-screenshot"><a href="' . $ssurl . '" alt="Full Size Screenshot"><img src="' . $ssurl . '" width="' . IOS_DISPLAY_PAGE_IMAGE_SIZE . '" /></a></li>';
 		}
 		?>
 	</div>
