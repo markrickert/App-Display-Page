@@ -99,6 +99,7 @@ function ios_display_page_output($app) {
 		<ul class="app-screenshots">
 		<?php
 		foreach($app->screenshotUrls as $ssurl) {
+			$ssurl = str_replace(".png", ".320x480-75.jpg", $ssurl);
 			echo '<li class="app-screenshot"><a href="' . $ssurl . '" alt="Full Size Screenshot"><img src="' . $ssurl . '" width="' . IOS_DISPLAY_PAGE_IMAGE_SIZE . '" /></a></li>';
 		}
 		?>
