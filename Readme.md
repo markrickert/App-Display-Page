@@ -19,7 +19,7 @@ thing to do.
 * Clone or download the repos.
 * Upload the folder 'app-display-page' to your Wordpress installation's plugins folder.
 * Log into Wordpress and activate the plugin.
-* In any post or page, insert the following shortcode: [ios-app id="1234"] (where "1234" is your application's App Store ID)
+* In any post or page, insert the following shortcode: \[ios-app id="1234"\] (where "1234" is your application's App Store ID)
 * Save the page and check out the result!
 
 This plugin will cache the data from your application
