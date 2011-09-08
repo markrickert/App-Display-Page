@@ -9,7 +9,7 @@
  */
 
 define('IOS_DISPLAY_PAGE_APPSTORE_URL', 'http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/wa/wsLookup?id=');
-define('IOS_DISPLAY_PAGE_ICON_SIZE', 175);
+define('IOS_DISPLAY_PAGE_ICON_SIZE', 225);
 define('IOS_DISPLAY_PAGE_IMAGE_SIZE', 120);
 
 add_shortcode('ios-app', 'ios_display_page_shortcode');
