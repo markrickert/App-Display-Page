@@ -19,7 +19,8 @@ function ios_display_page_shortcode( $atts ) {
 
 
 	extract( shortcode_atts( array(
-		'id' => ''
+		'id' => '',
+		'download_url' => ''
 	), $atts ) );
 	
 	//Don't do anything if the ID is blank or non-numeric
@@ -36,7 +37,7 @@ function ios_display_page_shortcode( $atts ) {
 		update_option('ios-app-' . $id, $ios_app_options);
 	}
 	
-	ios_display_page_output($ios_app_options['app_data']);
+	ios_display_page_output($ios_app_options['app_data'], $download_url);
 }
 
 function ios_display_page_add_stylesheet() {
@@ -59,7 +60,7 @@ function ios_display_page_get_json($id) {
 	return $json_data->results[0];	
 }
 
-function ios_display_page_output($app) {
+function ios_display_page_output($app, $download_url) {
 ?>
 <div class="app-wrapper">
 
@@ -78,7 +79,7 @@ function ios_display_page_output($app) {
 		<?php } else { ?>
 		Only $<?php echo $app->price; ?>!<br />
 		<?php } ?>
-		<a href="<?php echo $app->trackViewUrl ;?>">
+		<a href="<?php if($download_url)echo $download_url; else echo $app->trackViewUrl; ?>">
 			<img src="http://ax.phobos.apple.com.edgesuite.net/images/web/linkmaker/badge_appstore-lrg.gif" alt="App Store" style="border: 0;"/>
 		</a>
 	</div>
