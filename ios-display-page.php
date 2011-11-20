@@ -54,7 +54,7 @@ function ios_display_page_get_json($id) {
 	$json_data = json_decode(file_get_contents(IOS_DISPLAY_PAGE_APPSTORE_URL . $id));
 	
 	if($json_data->resultCount == 0) {
-		wp_die('<h1>Apple returned no record for that app ID.<br />Please check your variable.</h1>');
+		wp_die('<h1>Apple returned no record for that app ID.<br />Please check your app ID.</h1>');
 	}
 	
 	return $json_data->results[0];	
@@ -118,7 +118,7 @@ function ios_display_page_output($app, $download_url) {
 		}
 		?>
 	</div>
-	<div style="display:none;clear:left;">&nbsp;</div>
+	<div style="clear:left;">&nbsp;</div>
 	<?php }
 
 
