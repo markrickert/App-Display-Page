@@ -20,7 +20,7 @@ thing to do.
 * Upload the folder 'app-display-page' to your Wordpress installation's plugins folder.
 * Log into Wordpress and activate the plugin.
 * In any post or page, insert the following shortcode: \[ios-app id="1234"\] (where "1234" is your application's App Store ID).
-* You can also specify a download link like this: \[ios-app id="1234"\ download_url="http://www.yourlinktrackerurl.com"]
+* You can also specify a download link like this: \[ios-app id="1234" download_url="http://www.yourlinktrackerurl.com"\]
 * Save the page and check out the result!
 
 This plugin will cache the data from your application
