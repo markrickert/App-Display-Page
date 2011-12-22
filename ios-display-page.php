@@ -17,7 +17,6 @@ add_action('wp_print_styles', 'ios_display_page_add_stylesheet');
 
 function ios_display_page_shortcode( $atts ) {
 
-
 	extract( shortcode_atts( array(
 		'id' => '',
 		'download_url' => ''
@@ -30,9 +29,11 @@ function ios_display_page_shortcode( $atts ) {
 	$ios_app_options = get_option('ios-app-' . $id, '');
 	
 	$check_interval = 60 * 60 * 24;
-	if($ios_app_options == '' || $ios_app_options['last_checked'] + $check_interval > time()) {
+	
+	if($ios_app_options == '' || $ios_app_options['next_check'] < time()) {
+	
 		$ios_app_options_data = ios_display_page_get_json($id);
-		$ios_app_options = array('last_checked' => time(), 'app_data' => $ios_app_options_data);
+		$ios_app_options = array('next_check' => time() + $check_interval, 'app_data' => $ios_app_options_data);
 
 		update_option('ios-app-' . $id, $ios_app_options);
 	}
@@ -50,15 +51,38 @@ function ios_display_page_add_stylesheet() {
 }
 
 function ios_display_page_get_json($id) {
-	//Get and parse the data from Apple
-	$json_data = json_decode(file_get_contents(IOS_DISPLAY_PAGE_APPSTORE_URL . $id));
-	
+
+	if(function_exists('file_get_contents') && ini_get('allow_url_fopen'))
+		$json_data  = ios_display_page_get_json_via_fopen($id);
+	else if(function_exists('curl_exec'))
+		$json_data = ios_display_page_get_json_via_curl($id);
+	else
+		wp_die('<h1>You must have either file_get_contents() or curl_exec() enabled on your web server. Please contact your hosting provider.</h1>');		
+
 	if($json_data->resultCount == 0) {
 		wp_die('<h1>Apple returned no record for that app ID.<br />Please check your app ID.</h1>');
 	}
 	
-	return $json_data->results[0];	
+	return $json_data->results[0];
+
 }
+
+function ios_display_page_get_json_via_fopen($id) {
+	return json_decode(file_get_contents(IOS_DISPLAY_PAGE_APPSTORE_URL . $id));
+}
+
+function ios_display_page_get_json_via_curl($id) {
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, IOS_DISPLAY_PAGE_APPSTORE_URL . $id);
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+    $output = curl_exec($ch);
+    curl_close($ch);
+
+	return json_decode($output);
+}
+
 
 function ios_display_page_output($app, $download_url) {
 ?>
