@@ -296,7 +296,7 @@ function ios_app_save_images_locally($app) {
 	$upload_dir = wp_upload_dir();
 	
 	if(!is_writeable($upload_dir['basedir'])) {
-		echo 'upload dir is not writeable';
+		//Uploads dir isn't writeable. bummer.
 		define('IOS_APP_PAGE_CACHE_IMAGES', false);
 		return;
 	} else {
