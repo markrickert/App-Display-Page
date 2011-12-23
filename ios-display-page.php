@@ -14,9 +14,9 @@ define('IOS_APP_PAGE_IMAGE_SIZE', 120);
 define('IOS_APP_PAGE_CACHE_TIME', 60 * 60 * 24); //One Day
 define('IOS_APP_PAGE_CACHE_IMAGES', true);
 
-add_shortcode('ios-app', 'ios_display_page_shortcode');
-add_shortcode('ios_app', 'ios_display_page_shortcode');
-add_action('wp_print_styles', 'ios_display_page_add_stylesheet');
+add_shortcode('ios-app', 'ios_app_page_shortcode');
+add_shortcode('ios_app', 'ios_app_page_shortcode');
+add_action('wp_print_styles', 'ios_app_page_add_stylesheet');
 
 //Available Actions
 $actions = array('name', 'icon', 'icon_url', 'version', 'price', 'release_notes', 'description', 'rating', 'iphoness', 'ipadss', 'itunes_link');
@@ -111,7 +111,7 @@ function ios_app_itunes_link( $atts ) {
 	return $app->trackViewUrl;
 }
 
-function ios_display_page_shortcode( $atts ) {
+function ios_app_page_shortcode( $atts ) {
 
 	extract( shortcode_atts( array(
 		'id' => '',
@@ -123,7 +123,7 @@ function ios_display_page_shortcode( $atts ) {
 	
 	$app = ios_app_get_data($id);
 	if($app)
-		ios_display_page_output($app, $download_url);
+		ios_app_page_output($app, $download_url);
 	else
 		wp_die('No valid data for app id: ' . $id);
 }
@@ -134,7 +134,7 @@ function ios_app_get_data( $id ) {
 		
 	if($ios_app_options == '' || $ios_app_options['next_check'] < time()) {
 		
-		$ios_app_options_data = ios_display_page_get_json($id);
+		$ios_app_options_data = ios_app_page_get_json($id);
 		$ios_app_options = array('next_check' => time() + IOS_APP_PAGE_CACHE_TIME, 'app_data' => $ios_app_options_data);
 
 		update_option('ios-app-' . $id, $ios_app_options);
@@ -144,17 +144,17 @@ function ios_app_get_data( $id ) {
 	return $ios_app_options['app_data'];
 }
 
-function ios_display_page_add_stylesheet() {
+function ios_app_page_add_stylesheet() {
 	wp_register_style('ios-app-styles', plugins_url( 'ios-app-styles.css', __FILE__ ));
 	wp_enqueue_style( 'ios-app-styles');
 }
 
-function ios_display_page_get_json($id) {
+function ios_app_page_get_json($id) {
 
 	if(function_exists('file_get_contents') && ini_get('allow_url_fopen'))
-		$json_data  = ios_display_page_get_json_via_fopen($id);
+		$json_data  = ios_app_page_get_json_via_fopen($id);
 	else if(function_exists('curl_exec'))
-		$json_data = ios_display_page_get_json_via_curl($id);
+		$json_data = ios_app_page_get_json_via_curl($id);
 	else
 		wp_die('<h1>You must have either file_get_contents() or curl_exec() enabled on your web server. Please contact your hosting provider.</h1>');		
 
@@ -166,11 +166,11 @@ function ios_display_page_get_json($id) {
 
 }
 
-function ios_display_page_get_json_via_fopen($id) {
+function ios_app_page_get_json_via_fopen($id) {
 	return json_decode(ios_app_fopenme(IOS_APP_PAGE_APPSTORE_URL . $id));
 }
 
-function ios_display_page_get_json_via_curl($id) {
+function ios_app_page_get_json_via_curl($id) {
 	return json_decode(ios_app_curlme(IOS_APP_PAGE_APPSTORE_URL . $id));
 }
 
@@ -200,7 +200,7 @@ function ios_app_fopen_or_curl($url)
 }
 
 
-function ios_display_page_output($app, $download_url) {
+function ios_app_page_output($app, $download_url) {
 ?>
 <div class="app-wrapper">
 
