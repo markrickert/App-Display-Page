@@ -2,7 +2,7 @@
 /*
  * Plugin Name: iOS Display Page
  * Version: 1.3
- * Plugin URI: http://www.ear-fung.us
+ * Plugin URI: http://www.ear-fung.us/
  * Description: Adds a shortcode so that you can pull and display app store applications.
  * Author: Mark Rickert
  * Author URI: http://www.ear-fung.us/
