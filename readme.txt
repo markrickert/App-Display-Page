@@ -22,7 +22,7 @@ Check out the example of what it produces here: http://www.mohawkapps.com/checko
 
 1. Upload the plugin folder to the `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Place the shortcode `[ios_app id="1234"]` (where "1234" is your application's App Store ID) anywher ein a post or page.
+1. Place the shortcode `[ios_app id="1234"]` (where "1234" is your application's App Store ID) anywhere in a post or page.
 
 == Frequently Asked Questions ==
 
