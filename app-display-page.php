@@ -1,9 +1,9 @@
 <?php 
 /*
- * Plugin Name: iOS Display Page
+ * Plugin Name: App Display Page
  * Version: 1.3
  * Plugin URI: http://www.ear-fung.us/
- * Description: Adds a shortcode so that you can pull and display app store applications.
+ * Description: Adds a shortcode so that you can pull and display iOS App Store applications.
  * Author: Mark Rickert
  * Author URI: http://www.ear-fung.us/
  */
@@ -145,8 +145,8 @@ function ios_app_get_data( $id ) {
 }
 
 function ios_app_page_add_stylesheet() {
-	wp_register_style('ios-app-styles', plugins_url( 'ios-app-styles.css', __FILE__ ));
-	wp_enqueue_style( 'ios-app-styles');
+	wp_register_style('app-display-page-styles', plugins_url( 'app-display-page-styles.css', __FILE__ ));
+	wp_enqueue_style( 'app-display-page-styles');
 }
 
 function ios_app_page_get_json($id) {
