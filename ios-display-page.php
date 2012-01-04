@@ -123,7 +123,7 @@ function ios_app_page_shortcode( $atts ) {
 	
 	$app = ios_app_get_data($id);
 	if($app)
-		ios_app_page_output($app, $download_url);
+		return ios_app_page_output($app, $download_url);
 	else
 		wp_die('No valid data for app id: ' . $id);
 }
@@ -201,6 +201,9 @@ function ios_app_fopen_or_curl($url)
 
 
 function ios_app_page_output($app, $download_url) {
+
+	ob_start();
+
 ?>
 <div class="app-wrapper">
 
@@ -283,6 +286,11 @@ function ios_app_page_output($app, $download_url) {
 	</div>
 	<div style="clear:left;">&nbsp;</div>
 	<?php }
+
+	$return = ob_get_contents();
+	ob_end_clean();
+	
+	return $return;
 }
 
 function ios_ap_extract_id( $atts ) {

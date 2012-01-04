@@ -1,10 +1,9 @@
 # App Display Page
 
-This is a simple PHP script paired with a 
-Wordpress plugin that you can modify to fit
-your own needs. Use your iOS's application id
-and it will spit out some basic HTML that you can
-then apply your own styling to.
+This is a simple Wordpress plugin that you can 
+modify to fit your own needs. Use your iOS's 
+application id and it will spit out some basic HTML 
+that you can then apply your own styling to.
 
 # Why?
 
@@ -46,5 +45,5 @@ This plugin will cache the data from your application
 in the Wordpress database for 24 hours. The application
 icons and screenshots are cached on your server by default
 but if you'd like to pull those images directly from Apple's
-CDN servers, change the value of ```IOS_APP_PAGE_CACHE_IMAGES``` 
+CDN servers (usually faster), change the value of ```IOS_APP_PAGE_CACHE_IMAGES``` 
 to ```false```
