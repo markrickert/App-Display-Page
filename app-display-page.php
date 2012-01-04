@@ -1,12 +1,12 @@
 <?php 
 /*
- * Plugin Name: App Display Page
- * Version: 1.3
- * Plugin URI: http://www.ear-fung.us/
- * Description: Adds a shortcode so that you can pull and display iOS App Store applications.
- * Author: Mark Rickert
- * Author URI: http://www.ear-fung.us/
- */
+Plugin Name: App Display Page
+Version: 1.3
+Plugin URI: http://www.ear-fung.us/
+Description: Adds a shortcode so that you can pull and display iOS App Store applications.
+Author: Mark Rickert
+Author URI: http://www.ear-fung.us/
+*/
 
 define('IOS_APP_PAGE_APPSTORE_URL', 'http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/wa/wsLookup?id=');
 define('IOS_APP_PAGE_ICON_SIZE', 175);
