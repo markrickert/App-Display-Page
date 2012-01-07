@@ -1,15 +1,25 @@
-	.app-screenshots {
-		list-style-type: none !important;
-		margin: 0;
-		padding: 0;
-	}
-	.app-screenshots li {
-		float: left;
-		list-style-type: none !important;
-	}
-	.app-icon {
-		float: right;
-	}
-	.app-rating {
-		margin-bottom: 10px;
-	}
+.app-screenshots {
+	list-style-type: none !important;
+	margin: 0;
+	padding: 0;
+}
+.app-screenshots li {
+	float: left;
+	list-style-type: none !important;
+}
+.app-icon {
+	float: right;
+}
+.app-rating {
+	margin-bottom: 10px;
+}
+
+#app-icon-container {
+	float: right;
+	border-radius: 30px;
+	-moz-border-radius: 30px;
+	-webkit-border-radius: 30px;
+	overflow: hidden;
+	background-color: #FFFFFF;
+
+}

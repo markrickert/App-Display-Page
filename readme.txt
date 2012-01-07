@@ -1,10 +1,10 @@
 === App Display Page ===
 Contributors: mjar81
-Donate link: http://www.ear-fung.us/
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=mjar81%40gmail%2ecom&lc=US&item_name=Mark%20Rickert&no_note=0&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
 Tags: iOS, App Store, iTunes, apps, appstore, iphone, ipad, objective-c, obj-c
-Requires at least: 2.5
+Requires at least: 2.7
 Tested up to: 3.3
-Stable tag: 1.3.1
+Stable tag: 1.4
 
 Adds a shortcode to display information about iOS apps from Apple's App Store.
 
@@ -33,6 +33,11 @@ None.
 Please visit http://www.mohawkapps.com/checkout-helper/ for a working example.
 
 == Changelog ==
+
+= 1.4 =
+* New min required wordpresss version: 2.7
+* Added round corners for modern browsers on the app icons.
+* Legit settings page now. No more hacking at the plugin file.
 
 = 1.3.1 =
 * Fixed bug where apps with zero ratings would display the ratings text incorrectly.
