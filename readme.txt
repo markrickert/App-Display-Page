@@ -4,7 +4,7 @@ Donate link: http://www.ear-fung.us/
 Tags: iOS, App Store, iTunes, apps, appstore, iphone, ipad, objective-c, obj-c
 Requires at least: 2.5
 Tested up to: 3.3
-Stable tag: 1.3
+Stable tag: 1.3.1
 
 Adds a shortcode to display information about iOS apps from Apple's App Store.
 
@@ -30,9 +30,12 @@ None.
 
 == Screenshots ==
 
-none. Visit http://www.mohawkapps.com/checkout-helper/ for a working example.
+Please visit http://www.mohawkapps.com/checkout-helper/ for a working example.
 
 == Changelog ==
+
+= 1.3.1 =
+* Fixed bug where apps with zero ratings would display the ratings text incorrectly.
 
 = 1.3 =
 * Initial public release on Wordpress.org
@@ -57,4 +60,4 @@ You can also use the following shortcodes to pull only parts of the application'
 * ipadss
 * itunes_link
 
-This plugin will cache the data from your application in the Wordpress database for 24 hours. The application icons and screenshots are cached on your server by default but if you'd like to pull those images directly from Apple's CDN servers (usually faster), change the value of IOS_APP_PAGE_CACHE_IMAGES to false
+This plugin will cache the data from your application in the Wordpress database for 24 hours. Application icons and screenshots are cached on your server by default but if you'd like to pull those images directly from Apple's CDN servers (usually faster), change the value of IOS_APP_PAGE_CACHE_IMAGES to false

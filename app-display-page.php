@@ -1,7 +1,7 @@
 <?php 
 /*
 Plugin Name: App Display Page
-Version: 1.3
+Version: 1.3.1
 Plugin URI: http://www.ear-fung.us/
 Description: Adds a shortcode so that you can pull and display iOS App Store applications.
 Author: Mark Rickert
@@ -72,7 +72,10 @@ function ios_app_description( $atts ) {
 
 function ios_app_rating( $atts ) {
 	$app = ios_app_get_data(ios_ap_extract_id($atts));
-	return 'Rated' . $app->averageUserRating . ' out of 5 by ' . $app->userRatingCount . ' users.';
+	if(isset($app->userRatingCount))
+		return 'Rated' . $app->averageUserRating . ' out of 5 by ' . $app->userRatingCount . ' users.';
+	else
+		return '';
 }
 
 function ios_app_iphoness( $atts ) {
@@ -221,10 +224,11 @@ function ios_app_page_output($app, $download_url) {
 	
 	<h1 class="app-title"><?php echo $app->trackName; ?><span class="app-version"> <?php echo $app->version; ?></span></h1>
 
+	<?php if(isset($app->userRatingCount)) { ?>
 	<div class="app-rating">
 		Rated <?php echo $app->averageUserRating; ?> out of 5 by <?php echo $app->userRatingCount; ?> users.
 	</div>
-
+	<?php } ?>
 	
 	<div class="app-purchase">
 		<?php if($app->price == 0) { ?>
