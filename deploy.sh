@@ -15,6 +15,12 @@ SVNPATH="/tmp/$PLUGINSLUG" # path to a temp SVN repo. No trailing slash required
 SVNURL="http://plugins.svn.wordpress.org/app-display-page/" # Remote SVN repo on wordpress.org, with no trailing slash
 SVNUSER="mjar81" # your svn username
 
+SVNIGNORE = "deploy.sh
+README.md
+Readme.md
+.git
+.gitignore
+deploy.sh"
 
 # Let's begin...
 echo ".........................................."
@@ -50,21 +56,33 @@ echo
 echo "Creating local copy of SVN repo ..."
 svn co $SVNURL $SVNPATH
 
-echo "Exporting the HEAD of master from git to the trunk of SVN"
-git checkout-index -a -f --prefix=$SVNPATH/trunk/
+echo "Copying all files from the HEAD of master in git to the trunk of SVN"
+# rsync the directories so that we're sure that files are deleted that should be
+roption=(
+    -a
+    --verbose
+    --recursive
+    --stats
+    --exclude="'$SVNIGNORE'"
+    --exclude=".svn"
+    --delete-excluded
+    --delete
+)
+rsync "${roption[@]}" ./ "$SVNPATH/trunk/"
 
 echo "Ignoring github specific files and deployment script"
-svn propset svn:ignore "deploy.sh
-README.md
-Readme.md
-.git
-.gitignore" "$SVNPATH/trunk/"
+svn propset svn:ignore "$SVNIGNORE" "$SVNPATH/trunk/"
 
 echo "Changing directory to SVN and committing to trunk"
 cd $SVNPATH/trunk/
 # Add all new files that are not set to be ignored
 svn status | grep -v "^.[ \t]*\..*" | grep "^?" | awk '{print $2}' | xargs svn add
+# Delete files that aren't present any more.
+svn status | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %
+
 svn commit --username=$SVNUSER -m "$COMMITMSG"
+
+exit
 
 echo "Creating new SVN tag & committing it"
 cd $SVNPATH
