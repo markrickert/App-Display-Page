@@ -1,7 +1,7 @@
 <?php 
 /*
 Plugin Name: App Display Page
-Version: 1.4
+Version: 1.4.1
 Plugin URI: http://www.ear-fung.us/
 Description: Adds a shortcode so that you can pull and display iOS App Store applications.
 Author: Mark Rickert
@@ -153,7 +153,7 @@ function ios_app_get_data( $id ) {
 	if($ios_app_options == '' || $ios_app_options['next_check'] < time()) {
 		
 		$ios_app_options_data = ios_app_page_get_json($id);
-		$ios_app_options = array('next_check' => time() + app_display_page_settings('cache_time_select_box'), 'app_data' => $ios_app_options_data);
+		$ios_app_options = array('next_check' => time() + ios_app_setting('cache_time_select_box'), 'app_data' => $ios_app_options_data);
 
 		update_option('ios-app-' . $id, $ios_app_options);
 		if(ios_app_setting('cache_images_locally') == '1')ios_app_save_images_locally($ios_app_options['app_data']);
