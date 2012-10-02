@@ -63,8 +63,6 @@ roption=(
     --recursive
     --stats
     --exclude="'$SVNIGNORE'"
-    --delete-excluded
-    --delete
 )
 rsync "${roption[@]}" ./ "$SVNPATH/trunk/"
 
