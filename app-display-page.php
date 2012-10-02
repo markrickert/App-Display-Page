@@ -1,7 +1,7 @@
 <?php 
 /*
 Plugin Name: App Display Page
-Version: 1.4.1
+Version: 1.5
 Plugin URI: http://www.ear-fung.us/
 Description: Adds a shortcode so that you can pull and display iOS App Store applications.
 Author: Mark Rickert
@@ -32,6 +32,11 @@ define('IOS_APP_PAGE_APPSTORE_URL', 'http://ax.itunes.apple.com/WebObjects/MZSto
 add_shortcode('ios-app', 'ios_app_page_shortcode');
 add_shortcode('ios_app', 'ios_app_page_shortcode');
 add_action('wp_print_styles', 'ios_app_page_add_stylesheet');
+add_action('init', 'ios_app_init');
+
+function ios_app_init() {
+	add_action('wp_head', 'ios_app_header_meta');
+}
 
 //Available Actions
 $actions = array('name', 'icon', 'icon_url', 'version', 'price', 'release_notes', 'description', 'rating', 'iphoness', 'ipadss', 'itunes_link');
@@ -61,6 +66,25 @@ function ios_app_icon_url( $atts ) {
 	return $artwork_url;
 }
 
+// Output an app smart banner
+// http://developer.apple.com/library/ios/Documentation/AppleApplications/Reference/SafariWebContent/PromotingAppswithAppBanners/PromotingAppswithAppBanners.html
+function ios_app_header_meta( $atts ) {
+	global $post;
+
+	$pattern = get_shortcode_regex();
+	if ( preg_match_all( '/'. $pattern .'/s', $post->post_content, $matches ) && array_key_exists( 2, $matches ) && (in_array( 'ios-app', $matches[2] ) || in_array( 'ios_app', $matches[2] ) ))
+	{
+		// shortcode is being used
+		if($matches[0][0])
+		{
+			$atts = shortcode_parse_atts($matches[0][0]);
+			$id = ios_ap_extract_id($atts);
+
+			if($id)
+				echo "\n" . '<meta name="apple-itunes-app" content="app-id=' . $id . '"/>' .  "\n";	
+		}
+	}
+}
 
 function ios_app_version( $atts ) {
 	$app = ios_app_get_data(ios_ap_extract_id($atts));

@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=mjar8
 Tags: iOS, App Store, iTunes, apps, appstore, iphone, ipad, objective-c, obj-c
 Requires at least: 2.7
 Tested up to: 3.3
-Stable tag: 1.4.1
+Stable tag: 1.5
 
 Adds a shortcode to display information about iOS apps from Apple's App Store.
 
@@ -33,6 +33,9 @@ None.
 Please visit http://www.mohawkapps.com/checkout-helper/ for a working example.
 
 == Changelog ==
+
+= 1.5 =
+* Added the Smart App Banner (new feature in iOS 6's version of Safari) for pages with the shortcode included. http://developer.apple.com/library/ios/Documentation/AppleApplications/Reference/SafariWebContent/PromotingAppswithAppBanners/PromotingAppswithAppBanners.html
 
 = 1.4 =
 * New min required wordpresss version: 2.7
