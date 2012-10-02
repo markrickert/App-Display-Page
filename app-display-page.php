@@ -1,7 +1,7 @@
 <?php 
 /*
 Plugin Name: App Display Page
-Version: 1.5
+Version: 1.5.1
 Plugin URI: http://www.ear-fung.us/
 Description: Adds a shortcode so that you can pull and display iOS App Store applications.
 Author: Mark Rickert
@@ -149,8 +149,17 @@ function ios_app_ipadss( $atts ) {
 }
 
 function ios_app_itunes_link( $atts ) {
-	$app = ios_app_get_data(ios_ap_extract_id($atts));
-	return $app->trackViewUrl;
+	if(is_object($atts))
+		$app = $atts;
+	else
+		$app = ios_app_get_data(ios_ap_extract_id($atts));
+
+	$url = $app->trackViewUrl;
+	
+	if(trim(ios_app_setting('linkshare_partner_id')) != '')
+		$url = "http://click.linksynergy.com/fs-bin/stat?id=" . ios_app_setting('linkshare_partner_id') . "&offerid=146261&type=3&subid=0&tmpid=1826&RD_PARM1=" . urlencode(urlencode($url)) . "%2526uo%253D4%2526partnerId%253D30";
+	
+	return $url;
 }
 
 function ios_app_page_shortcode( $atts ) {
@@ -277,7 +286,7 @@ function ios_app_page_output($app, $download_url) {
 		<?php } else { ?>
 		Only $<?php echo $app->price; ?>!<br />
 		<?php } ?>
-		<a href="<?php if($download_url)echo $download_url; else echo $app->trackViewUrl; ?>">
+		<a href="<?php if($download_url)echo $download_url; else echo ios_app_itunes_link($app); ?>">
 			<img src="http://ax.phobos.apple.com.edgesuite.net/images/web/linkmaker/badge_appstore-lrg.gif" alt="App Store" style="border: 0;"/>
 		</a>
 	</div>

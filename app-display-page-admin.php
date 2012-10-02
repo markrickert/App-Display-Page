@@ -31,7 +31,8 @@ function adp_add_defaults() {
 						"icon_size" => "175",
 						"ss_size" => "120",
 						"cache_time_select_box" => (24*60*60),
-						"cache_images_locally" => "1"
+						"cache_images_locally" => "1",
+						"linkshare_partner_id" => ""
 		);
 		update_option('adp_options', $arr);
 	}
@@ -113,11 +114,22 @@ function adp_render_form() {
 				<tr valign="top">
 					<th scope="row">Cache images locally:</th>
 					<td>
-						<!-- First checkbox button -->
 						<label><input name="adp_options[cache_images_locally]" type="checkbox" value="1" <?php if (isset($options['cache_images_locally'])) { checked('1', $options['cache_images_locally']); } ?> /> Yes</label><br />
 						<span style="color:#666666;margin-left:2px;">Load icons, screenshots, etc. locally instead of using Apple's CDN server. Your wp-content/uploads/ directory MUST be writeable for this option to have any effect.</span>
 					</td>
 				</tr>
+
+				<tr>
+					<th scope="row">Linkshare Partner ID:</th>
+					<td>
+						<input type="text" size="10" name="adp_options[linkshare_partner_id]" value="<?php echo $options['linkshare_partner_id']; ?>" />
+						<span style="color:#666666;margin-left:2px;">Leave this blank if you don not have an Linkshare iTunes affiliate account.<br />
+						You can find this by looking at a generated Linkshare URL and taking the property after "id=" like this:<br />
+						<em>http://click.linksynergy.com/fs-bin/stat?id=<b>BiWowje1A</b>&amp;offerid=146261&amp;type=3&amp;subid=0...</em></span>
+					</td>
+				</tr>
+
+
 
 			</table>
 			<p class="submit">
