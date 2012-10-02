@@ -19,8 +19,7 @@ SVNIGNORE = "deploy.sh
 README.md
 Readme.md
 .git
-.gitignore
-deploy.sh"
+.gitignore"
 
 # Let's begin...
 echo ".........................................."
@@ -64,7 +63,6 @@ roption=(
     --recursive
     --stats
     --exclude="'$SVNIGNORE'"
-    --exclude=".svn"
     --delete-excluded
     --delete
 )
