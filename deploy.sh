@@ -5,7 +5,7 @@
 # main config
 PLUGINSLUG="app-display-page"
 CURRENTDIR=`pwd`
-MAINFILE="app-display-page.php" # this should be the name of your main php file in the wordpress plugin
+MAINFILE="$PLUGINSLUG.php" # this should be the name of your main php file in the wordpress plugin
 
 # git config
 GITPATH="$CURRENTDIR/" # this file should be in the base of your git repository
@@ -19,15 +19,17 @@ SVNIGNORE = "deploy.sh
 README.md
 Readme.md
 .git
-.gitignore"
+.gitignore
+deploy.sh
+deploy2.sh"
 
 # Let's begin...
 echo ".........................................."
-echo 
-echo "Preparing to deploy wordpress plugin"
-echo 
+echo
+echo "Preparing to deploy WordPress plugin"
+echo
 echo ".........................................."
-echo 
+echo
 
 # Check version in readme.txt is the same as plugin file
 NEWVERSION1=`grep "^Stable tag" $GITPATH/readme.txt | awk -F' ' '{print $3}'`
@@ -51,34 +53,34 @@ echo "Pushing latest commit to origin, with tags"
 git push origin master
 git push origin master --tags
 
-echo 
+echo
 echo "Creating local copy of SVN repo ..."
 svn co $SVNURL $SVNPATH
 
-echo "Copying all files from the HEAD of master in git to the trunk of SVN"
-# rsync the directories so that we're sure that files are deleted that should be
-roption=(
-    -a
-    --verbose
-    --recursive
-    --stats
-    --exclude="'$SVNIGNORE'"
-)
-rsync "${roption[@]}" ./ "$SVNPATH/trunk/"
-
 echo "Ignoring github specific files and deployment script"
-svn propset svn:ignore "$SVNIGNORE" "$SVNPATH/trunk/"
+svn propset svn:ignore "deploy.sh
+README.md
+.git
+.gitignore" "$SVNPATH/trunk/"
+
+#export git -> SVN
+echo "Exporting the HEAD of master from git to the trunk of SVN"
+git checkout-index -a -f --prefix=$SVNPATH/trunk/
+
+#if submodule exist, recursively check out their indexes
+if [ -f ".gitmodules" ]
+then
+echo "Exporting the HEAD of each submodule from git to the trunk of SVN"
+git submodule init
+git submodule update
+git submodule foreach --recursive 'git checkout-index -a -f --prefix=$SVNPATH/trunk/$path/'
+fi
 
 echo "Changing directory to SVN and committing to trunk"
 cd $SVNPATH/trunk/
 # Add all new files that are not set to be ignored
 svn status | grep -v "^.[ \t]*\..*" | grep "^?" | awk '{print $2}' | xargs svn add
-# Delete files that aren't present any more.
-svn status | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %
-
 svn commit --username=$SVNUSER -m "$COMMITMSG"
-
-exit
 
 echo "Creating new SVN tag & committing it"
 cd $SVNPATH

@@ -5,7 +5,6 @@ register_activation_hook(__FILE__, 'adp_add_defaults');
 register_uninstall_hook(__FILE__, 'adp_delete_plugin_options');
 add_action('admin_init', 'adp_init' );
 add_action('admin_menu', 'adp_add_options_page');
-add_filter( 'plugin_action_links', 'adp_plugin_action_links', 10, 2 );
 
 // Delete options table entries ONLY when plugin deactivated AND deleted
 function adp_delete_plugin_options() {
@@ -44,6 +43,10 @@ function adp_init(){
 	$settings = get_option('adp_options');
 	if(!$settings) adp_add_defaults();
 
+	//Added store country option
+	if(!ios_app_setting('store_country'))
+		ios_app_set_setting('store_country', 'us');
+
 	register_setting( 'adp_plugin_options', 'adp_options', 'adp_validate_options' );
 }
 
@@ -56,7 +59,7 @@ function adp_add_options_page() {
 function adp_render_form() {
 	?>
 	<div class="wrap">
-		
+
 		<div class="icon32" id="icon-options-general"><br></div>
 		<h2>App Display Page Options</h2>
 
@@ -65,6 +68,180 @@ function adp_render_form() {
 			<?php $options = get_option('adp_options'); ?>
 
 			<table class="form-table">
+
+				<tr>
+					<th scope="row">Store Country:</th>
+					<td>
+						<select name='adp_options[store_country]'>
+
+							<?php $stores = array(
+											"AL" => "Albania",
+											"DZ" => "Algeria",
+											"AO" => "Angola",
+											"AI" => "Anguilla",
+											"AG" => "Antigua and Barbuda",
+											"AR" => "Argentina",
+											"AM" => "Armenia",
+											"AU" => "Australia",
+											"AT" => "Austria",
+											"AZ" => "Azerbaijan",
+											"BS" => "Bahamas",
+											"BH" => "Bahrain",
+											"BB" => "Barbados",
+											"BY" => "Belarus",
+											"BE" => "Belgium",
+											"BZ" => "Belize",
+											"BJ" => "Benin",
+											"BM" => "Bermuda",
+											"BT" => "Bhutan",
+											"BO" => "Bolivia",
+											"BW" => "Botswana",
+											"BR" => "Brazil",
+											"BN" => "Brunei Darussalam",
+											"BG" => "Bulgaria",
+											"BF" => "Burkina Faso",
+											"KH" => "Cambodia",
+											"CA" => "Canada",
+											"CV" => "Cape Verde",
+											"KY" => "Cayman Islands",
+											"TD" => "Chad",
+											"CL" => "Chile",
+											"CN" => "China",
+											"CO" => "Colombia",
+											"CG" => "Congo, Republic of the",
+											"CR" => "Costa Rica",
+											"HR" => "Croatia",
+											"CY" => "Cyprus",
+											"CZ" => "Czech Republic",
+											"DK" => "Denmark",
+											"DM" => "Dominica",
+											"DO" => "Dominican Republic",
+											"EC" => "Ecuador",
+											"EG" => "Egypt",
+											"SV" => "El Salvador",
+											"EE" => "Estonia",
+											"FJ" => "Fiji",
+											"FI" => "Finland",
+											"FR" => "France",
+											"GM" => "Gambia",
+											"DE" => "Germany",
+											"GH" => "Ghana",
+											"GR" => "Greece",
+											"GD" => "Grenada",
+											"GT" => "Guatemala",
+											"GW" => "Guinea-Bissau",
+											"GY" => "Guyana",
+											"HN" => "Honduras",
+											"HK" => "Hong Kong",
+											"HU" => "Hungary",
+											"IS" => "Iceland",
+											"IN" => "India",
+											"ID" => "Indonesia",
+											"IE" => "Ireland",
+											"IL" => "Israel",
+											"IT" => "Italy",
+											"JM" => "Jamaica",
+											"JP" => "Japan",
+											"JO" => "Jordan",
+											"KZ" => "Kazakhstan",
+											"KE" => "Kenya",
+											"KR" => "Korea, Republic Of",
+											"KW" => "Kuwait",
+											"KG" => "Kyrgyzstan",
+											"LA" => "Lao, People's Democratic Republic",
+											"LV" => "Latvia",
+											"LB" => "Lebanon",
+											"LR" => "Liberia",
+											"LT" => "Lithuania",
+											"LU" => "Luxembourg",
+											"MO" => "Macau",
+											"MK" => "Macedonia",
+											"MG" => "Madagascar",
+											"MW" => "Malawi",
+											"MY" => "Malaysia",
+											"ML" => "Mali",
+											"MT" => "Malta",
+											"MR" => "Mauritania",
+											"MU" => "Mauritius",
+											"MX" => "Mexico",
+											"FM" => "Micronesia, Federated States of",
+											"MD" => "Moldova",
+											"MN" => "Mongolia",
+											"MS" => "Montserrat",
+											"MZ" => "Mozambique",
+											"NA" => "Namibia",
+											"NP" => "Nepal",
+											"NL" => "Netherlands",
+											"NZ" => "New Zealand",
+											"NI" => "Nicaragua",
+											"NE" => "Niger",
+											"NG" => "Nigeria",
+											"NO" => "Norway",
+											"OM" => "Oman",
+											"PK" => "Pakistan",
+											"PW" => "Palau",
+											"PA" => "Panama",
+											"PG" => "Papua New Guinea",
+											"PY" => "Paraguay",
+											"PE" => "Peru",
+											"PH" => "Philippines",
+											"PL" => "Poland",
+											"PT" => "Portugal",
+											"QA" => "Qatar",
+											"RO" => "Romania",
+											"RU" => "Russia",
+											"ST" => "São Tomé and Príncipe",
+											"SA" => "Saudi Arabia",
+											"SN" => "Senegal",
+											"SC" => "Seychelles",
+											"SL" => "Sierra Leone",
+											"SG" => "Singapore",
+											"SK" => "Slovakia",
+											"SI" => "Slovenia",
+											"SB" => "Solomon Islands",
+											"ZA" => "South Africa",
+											"ES" => "Spain",
+											"LK" => "Sri Lanka",
+											"KN" => "St. Kitts and Nevis",
+											"LC" => "St. Lucia",
+											"VC" => "St. Vincent and The Grenadines",
+											"SR" => "Suriname",
+											"SZ" => "Swaziland",
+											"SE" => "Sweden",
+											"CH" => "Switzerland",
+											"TW" => "Taiwan",
+											"TJ" => "Tajikistan",
+											"TZ" => "Tanzania",
+											"TH" => "Thailand",
+											"TT" => "Trinidad and Tobago",
+											"TN" => "Tunisia",
+											"TR" => "Turkey",
+											"TM" => "Turkmenistan",
+											"TC" => "Turks and Caicos",
+											"UG" => "Uganda",
+											"GB" => "United Kingdom",
+											"UA" => "Ukraine",
+											"AE" => "United Arab Emirates",
+											"UY" => "Uruguay",
+											"US" => "USA",
+											"UZ" => "Uzbekistan",
+											"VE" => "Venezuela",
+											"VN" => "Vietnam",
+											"VG" => "Virgin Islands, British",
+											"YE" => "Yemen",
+											"ZW" => "Zimbabwe"
+													);
+
+							foreach ($stores as $key => $value) {
+								echo '<option value="' . $key . '"' . selected($key, $options['store_country'], false) . '>' . $value . '</option>' . "\n";
+							}
+
+							?>
+
+						</select>
+						<span style="color:#666666;margin-left:2px;">This option determines how long before the plugin requests new data from Apple's servers.</span>
+					</td>
+				</tr>
 
 				<tr>
 					<th scope="row">Icon Width/Height:<br /><small>(in px.)</small></th>
@@ -84,7 +261,7 @@ function adp_render_form() {
 					<th scope="row">Data cache time:</th>
 					<td>
 						<select name='adp_options[cache_time_select_box]'>
-						
+
 							<?php $cache_intervals = array(
 														'Don\'t cache'=>0,
 														'1 minute'=>1*60,
@@ -99,13 +276,13 @@ function adp_render_form() {
 														'1 Month'=>24*60*60*7*30,
 														'1 Year'=>24*60*60*7*30*365
 													);
-							
+
 							foreach ($cache_intervals as $key => $value) {
-								echo '<option value="' . $value . '" ' . selected($value, $options['cache_time_select_box']) . '>' . $key . '</option>';
+								echo '<option value="' . $value . '"' . selected($value, $options['cache_time_select_box'], false) . '>' . $key . '</option>';
 							}
-							
+
 							?>
-							
+
 						</select>
 						<span style="color:#666666;margin-left:2px;">This option determines how long before the plugin requests new data from Apple's servers.</span>
 					</td>
@@ -137,22 +314,10 @@ function adp_render_form() {
 			</p>
 		</form>
 	</div>
-	<?php	
+	<?php
 }
 
 // Sanitize and validate input. Accepts an array, return a sanitized array.
 function adp_validate_options($input) {
 	return $input;
-}
-
-// Display a Settings link on the main Plugins page
-function adp_plugin_action_links( $links, $file ) {
-
-	if ( $file == plugin_basename( __FILE__ ) ) {
-		$adp_links = '<a href="'.get_admin_url().'options-general.php?page=plugin-options-starter-kit/plugin-options-starter-kit.php">'.__('Settings').'</a>';
-		// make the 'Settings' link appear first
-		array_unshift( $links, $adp_links );
-	}
-
-	return $links;
 }

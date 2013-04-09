@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=mjar8
 Tags: iOS, App Store, iTunes, apps, appstore, iphone, ipad, objective-c, obj-c
 Requires at least: 2.7
 Tested up to: 3.3
-Stable tag: 1.5.1
+Stable tag: 1.6
 
 Adds a shortcode to display information about iOS apps from Apple's App Store.
 
@@ -33,6 +33,9 @@ None.
 Please visit http://www.mohawkapps.com/checkout-helper/ for a working example.
 
 == Changelog ==
+
+= 1.6 =
+* Added store country selector to the admin page to change store search countries. Defaults to USA.
 
 = 1.5.1 =
 * Added linkshare ID option to settings. If filled in, it will change the links to the iTunes store to use your affiliate ID.
