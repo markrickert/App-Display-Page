@@ -30,6 +30,7 @@ function adp_add_defaults() {
 						"icon_size" => "175",
 						"ss_size" => "120",
 						"cache_time_select_box" => (24*60*60),
+						"display_smart_banner" => true,
 						"cache_images_locally" => "1",
 						"linkshare_partner_id" => ""
 		);
@@ -307,6 +308,15 @@ function adp_render_form() {
 				</tr>
 
 
+				<tr>
+					<th scope="row">Display a <a href="http://developer.apple.com/library/ios/Documentation/AppleApplications/Reference/SafariWebContent/PromotingAppswithAppBanners/PromotingAppswithAppBanners.html" target="_blank">Smart Banner</a>:</th>
+					<td>
+						<select name='adp_options[display_smart_banner]'>
+								<option value="1" <?php echo selected('1', $options['display_smart_banner'], false); ?>>Yes</option>
+								<option value="0" <?php echo selected('0', $options['display_smart_banner'], false); ?>>No</option>
+						</select>
+					</td>
+				<tr>
 
 			</table>
 			<p class="submit">

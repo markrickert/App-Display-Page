@@ -35,7 +35,9 @@ add_action('wp_print_styles', 'ios_app_page_add_stylesheet');
 add_action('init', 'ios_app_init');
 
 function ios_app_init() {
-	add_action('wp_head', 'ios_app_header_meta');
+	if(ios_app_setting('display_smart_banner') == "1") {
+		add_action('wp_head', 'ios_app_header_meta');
+	}
 }
 
 //Available Actions
@@ -69,21 +71,20 @@ function ios_app_icon_url( $atts ) {
 // Output an app smart banner
 // http://developer.apple.com/library/ios/Documentation/AppleApplications/Reference/SafariWebContent/PromotingAppswithAppBanners/PromotingAppswithAppBanners.html
 function ios_app_header_meta( $atts ) {
-	global $post;
+    global $post;
+    $pattern = get_shortcode_regex();
 
-	$pattern = get_shortcode_regex();
-	if ( preg_match_all( '/'. $pattern .'/s', $post->post_content, $matches ) && array_key_exists( 2, $matches ) && (in_array( 'ios-app', $matches[2] ) || in_array( 'ios_app', $matches[2] ) ))
-	{
-		// shortcode is being used
-		if($matches[0][0])
-		{
+    if (   preg_match_all( '/'. $pattern .'/s', $post->post_content, $matches )
+        && array_key_exists( 2, $matches )
+        && in_array( 'ios-app', $matches[2] ) )
+    {
+        // shortcode is being used
 			$atts = shortcode_parse_atts($matches[0][0]);
-			$id = ios_ap_extract_id($atts);
-
+			$id = preg_replace("/[^0-9]/", "", $atts['id']);
 			if($id)
 				echo "\n" . '<meta name="apple-itunes-app" content="app-id=' . $id . '"/>' .  "\n";
-		}
-	}
+
+    }
 }
 
 function ios_app_version( $atts ) {
@@ -438,7 +439,5 @@ function ios_app_set_setting($name, $value) {
 
 	$app_display_page_settings[$name] = $value;
 }
-
-
 
 ?>
