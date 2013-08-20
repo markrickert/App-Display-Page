@@ -157,8 +157,16 @@ function ios_app_itunes_link( $atts ) {
 
 	$url = $app->trackViewUrl;
 
-	if(trim(ios_app_setting('linkshare_partner_id')) != '')
-		$url = "http://click.linksynergy.com/fs-bin/stat?id=" . ios_app_setting('linkshare_partner_id') . "&offerid=146261&type=3&subid=0&tmpid=1826&RD_PARM1=" . urlencode(urlencode($url)) . "%2526uo%253D4%2526partnerId%253D30";
+	$partner_id = trim(ios_app_setting('phg_partner_id'));
+	if($partner_id != "")
+	{
+		$url .= "&at=" . $partner_id;
+
+		$campaign_id = trim(ios_app_setting('phg_campaign_id'));
+		if($campaign_id != ""){
+			$url .= "&ct=" . $campaign_id;
+		}
+	}
 
 	return $url;
 }

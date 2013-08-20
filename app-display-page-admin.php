@@ -32,7 +32,8 @@ function adp_add_defaults() {
 						"cache_time_select_box" => (24*60*60),
 						"display_smart_banner" => true,
 						"cache_images_locally" => "1",
-						"linkshare_partner_id" => ""
+						"phg_partner_id" => "",
+						"phg_campaign_id" => ""
 		);
 		update_option('adp_options', $arr);
 	}
@@ -298,15 +299,21 @@ function adp_render_form() {
 				</tr>
 
 				<tr>
-					<th scope="row">Linkshare Partner ID:</th>
+					<th scope="row">iTunes Affiliate:</th>
 					<td>
-						<input type="text" size="10" name="adp_options[linkshare_partner_id]" value="<?php echo $options['linkshare_partner_id']; ?>" />
-						<span style="color:#666666;margin-left:2px;">Leave this blank if you don not have an Linkshare iTunes affiliate account.<br />
-						You can find this by looking at a generated Linkshare URL and taking the property after "id=" like this:<br />
-						<em>http://click.linksynergy.com/fs-bin/stat?id=<b>BiWowje1A</b>&amp;offerid=146261&amp;type=3&amp;subid=0...</em></span>
+						<p>
+							<b>PHG Affiliate Token:</b><br />
+							<input type="text" size="10" name="adp_options[phg_partner_id]" value="<?php echo $options['phg_partner_id']; ?>" />
+							<span style="color:#666666;margin-left:2px;">Leave this blank if you don not have an iTunes affiliate account.<br />
+							You can find this by logging into <a href="https://affiliate.itunes.apple.com">affiliate.itunes.apple.com</a>.</span>
+						</p>
+						<p>
+							<b>PHG Affiliate Campaign:</b><br />
+							<input type="text" size="10" name="adp_options[phg_campaign_id]" value="<?php echo $options['phg_campaign_id']; ?>" />
+							<span style="color:#666666;margin-left:2px;">Any string you want to use to track this website's clicks.</span>
+						</p>
 					</td>
 				</tr>
-
 
 				<tr>
 					<th scope="row">Display a <a href="http://developer.apple.com/library/ios/Documentation/AppleApplications/Reference/SafariWebContent/PromotingAppswithAppBanners/PromotingAppswithAppBanners.html" target="_blank">Smart Banner</a>:</th>
