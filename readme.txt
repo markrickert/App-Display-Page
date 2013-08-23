@@ -1,7 +1,7 @@
 === App Display Page ===
 Contributors: mjar81
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=mjar81%40gmail%2ecom&lc=US&item_name=Mark%20Rickert&no_note=0&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
-Tags: iOS, App Store, iTunes, apps, appstore, iphone, ipad, objective-c, obj-c
+Tags: iOS, App Store, iTunes, apps, appstore, iphone, ipad, objective-c, obj-c, affiliate, phg, linkshare
 Requires at least: 2.7
 Tested up to: 3.3
 Stable tag: 1.7.1
@@ -10,7 +10,7 @@ Adds a shortcode to display information about iOS apps from Apple's App Store.
 
 == Description ==
 
-This is a simple Wordpress plugin that you can modify to fit your own needs. Use your iOS's application id and it will spit out some basic HTML that you can then apply your own styling to.
+This is a simple Wordpress plugin that you can modify to fit your own needs. Use your iOS's application id and it will spit out some basic HTML that you can then apply your own styling to. You can even use your PHG iTunes Affiliate code to earn some money from your links!
 
 Why?
 
