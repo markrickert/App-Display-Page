@@ -34,6 +34,11 @@ Please visit http://www.mohawkapps.com/checkout-helper/ for a working example.
 
 == Changelog ==
 
+= 1.7.1 =
+* Fix some caching issues.
+* Simplify codebase for easier maintainability.
+* Addressed issue where same screenshot would be displayed when caching on your server.
+
 = 1.7 =
 * Now allows the user to turn on off the smart banner functionality in the admin.
 * Updated code for new iTunes affiliate program and removed old Linkshare code. Set your new PHG Affiliate code and campaign in the admin.

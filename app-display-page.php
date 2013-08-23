@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: App Display Page
-Version: 1.7
+Version: 1.7.1
 Plugin URI: http://www.markrickert.me/
 Description: Adds a shortcode so that you can pull and display iOS App Store applications.
 Author: Mark Rickert
@@ -62,7 +62,7 @@ function ios_app_icon_url( $atts ) {
 	if(ios_app_setting('cache_images_locally') == '1')
 	{
 		$upload_dir = wp_upload_dir();
-		$artwork_url = $upload_dir['baseurl'] . '/ios-app/' . $app->trackId . '/' . basename($app->artworkUrl100);
+		$artwork_url = $upload_dir['baseurl'] . '/ios-app/' . $app->trackId . '/' . ios_app_ss_baseurl($app->artworkUrl100);
 	}
 
 	return $artwork_url;
@@ -113,35 +113,29 @@ function ios_app_description( $atts ) {
 function ios_app_rating( $atts ) {
 	$app = ios_app_get_data(ios_ap_extract_id($atts));
 	if(isset($app->userRatingCount))
-		return 'Rated' . $app->averageUserRating . ' out of 5 by ' . $app->userRatingCount . ' users.';
+		return 'Rated ' . $app->averageUserRating . ' out of 5 by ' . $app->userRatingCount . ' users.';
 	else
 		return '';
 }
 
 function ios_app_iphoness( $atts ) {
 	$app = ios_app_get_data(ios_ap_extract_id($atts));
-	$retval = '<ul>';
-	foreach($app->screenshotUrls as $ssurl) {
-		$ssurl = str_replace(".png", ".320x480-75.jpg", $ssurl);
-		if(ios_app_setting('cache_images_locally') == '1')
-		{
-			$upload_dir = wp_upload_dir();
-			$ssurl = $upload_dir['baseurl'] . '/ios-app/' . $app->trackId . '/' . basename($ssurl);
-		}
-		$retval .= '<li class="app-screenshot"><a href="' . $ssurl . '" alt="Full Size Screenshot"><img src="' . $ssurl . '" width="' . ios_app_setting('ss_size') . '" /></a></li>';
-	}
-	$retval .= '</ul>';
-	return $retval;
+	return ios_app_ss($app->screenshotUrls, $app);
 }
 
 function ios_app_ipadss( $atts ) {
 	$app = ios_app_get_data(ios_ap_extract_id($atts));
+	return ios_app_ss($app->ipadScreenshotUrls, $app);
+}
+
+function ios_app_ss($shots, $app) {
 	$retval = '<ul>';
-	foreach($app->ipadScreenshotUrls as $ssurl) {
+	foreach($shots as $ssurl) {
+		$ssurl = str_replace(".png", ".320x480-75.jpg", $ssurl);
 		if(ios_app_setting('cache_images_locally') == '1')
 		{
 			$upload_dir = wp_upload_dir();
-			$ssurl = $upload_dir['baseurl'] . '/ios-app/' . $app->trackId . '/' . basename($ssurl);
+			$ssurl = $upload_dir['baseurl'] . '/ios-app/' . $app->trackId . '/' . ios_app_ss_baseurl($ssurl);
 		}
 		$retval .= '<li class="app-screenshot"><a href="' . $ssurl . '" alt="Full Size Screenshot"><img src="' . $ssurl . '" width="' . ios_app_setting('ss_size') . '" /></a></li>';
 	}
@@ -189,16 +183,19 @@ function ios_app_page_shortcode( $atts ) {
 }
 
 function ios_app_get_data( $id ) {
+	if(is_object($id)) return $id;
+
 	//Check to see if we have a cached version of the JSON.
 	$ios_app_options = get_option('ios-app-' . $id, '');
 
-	if($ios_app_options == '' || $ios_app_options['next_check'] < time()) {
+	if($ios_app_options == '' || $ios_app_options['next_check'] < time() || ios_app_setting('cache_time_select_box') == 0) {
 
 		$ios_app_options_data = ios_app_page_get_json($id);
 		$ios_app_options = array('next_check' => time() + ios_app_setting('cache_time_select_box'), 'app_data' => $ios_app_options_data);
 
 		update_option('ios-app-' . $id, $ios_app_options);
-		if(ios_app_setting('cache_images_locally') == '1')ios_app_save_images_locally($ios_app_options['app_data']);
+
+		if(ios_app_setting('cache_images_locally') == '1') ios_app_save_images_locally($ios_app_options['app_data']);
 	}
 
 	return $ios_app_options['app_data'];
@@ -276,33 +273,23 @@ function ios_app_page_output($app, $download_url) {
 ?>
 <div class="app-wrapper">
 
-	<?php
- 		$artwork_url = $app->artworkUrl100;
-		if(ios_app_setting('cache_images_locally') == '1')
-		{
-			$upload_dir = wp_upload_dir();
-			$artwork_url = $upload_dir['baseurl'] . '/ios-app/' . $app->trackId . '/' . basename($app->artworkUrl100);
-		}
-
- 	?>
-
 	<div id="app-icon-container" style="width: <?php echo ios_app_setting('icon_size'); ?>px;height: <?php echo ios_app_setting('icon_size'); ?>px;">
-		<img class="app-icon" src="<?php echo $artwork_url; ?>" width="<?php echo ios_app_setting('icon_size'); ?>" height="<?php echo ios_app_setting('icon_size'); ?>" />
+		<img class="app-icon" src="<?php echo ios_app_icon_url($app); ?>" width="<?php echo ios_app_setting('icon_size'); ?>" height="<?php echo ios_app_setting('icon_size'); ?>" />
 	</div>
 
-	<h1 class="app-title"><?php echo $app->trackName; ?><span class="app-version"> <?php echo $app->version; ?></span></h1>
+	<h1 class="app-title"><?php echo ios_app_name($app); ?><span class="app-version"> <?php echo ios_app_version($app); ?></span></h1>
 
-	<?php if(isset($app->userRatingCount)) { ?>
+	<?php if(isset($app->userRatingCount)) : ?>
 	<div class="app-rating">
-		Rated <?php echo $app->averageUserRating; ?> out of 5 by <?php echo $app->userRatingCount; ?> users.
+		<?php echo ios_app_rating($app); ?>
 	</div>
-	<?php } ?>
+	<?php endif; ?>
 
 	<div class="app-purchase">
 		<?php if($app->price == 0) { ?>
-		Free!<br />
+		<?php echo ios_app_price($app);?><br />
 		<?php } else { ?>
-		Only $<?php echo $app->price; ?>!<br />
+		Only $<?php echo ios_app_price($app); ?>!<br />
 		<?php } ?>
 		<a href="<?php if($download_url)echo $download_url; else echo ios_app_itunes_link($app); ?>">
 			<img src="http://ax.phobos.apple.com.edgesuite.net/images/web/linkmaker/badge_appstore-lrg.gif" alt="App Store" style="border: 0;"/>
@@ -311,31 +298,19 @@ function ios_app_page_output($app, $download_url) {
 
 	<div class="app-releasenotes">
 		<h2>Latest Release Notes:</h2>
-		<?php echo nl2br($app->releaseNotes); ?>
+		<?php echo ios_app_release_notes($app); ?>
 	</div>
 
 	<div class="app-description">
 		<h2>Description:</h2>
-		<?php echo nl2br($app->description); ?>
+		<?php echo ios_app_description($app); ?>
 	</div>
 
 	<?php if(count($app->screenshotUrls) > 0) { ?>
 	<div class="app-screenshots-iphone">
 		<h2>iPhone Screenshots:</h2>
 		<ul class="app-screenshots">
-		<?php
-		foreach($app->screenshotUrls as $ssurl) {
-			$ssurl = str_replace(".png", ".320x480-75.jpg", $ssurl);
-
-			if(ios_app_setting('cache_images_locally') == '1')
-			{
-				$upload_dir = wp_upload_dir();
-				$ssurl = $upload_dir['baseurl'] . '/ios-app/' . $app->trackId . '/' . basename($ssurl);
-			}
-
-			echo '<li class="app-screenshot"><a href="' . $ssurl . '" alt="Full Size Screenshot"><img src="' . $ssurl . '" width="' . ios_app_setting('ss_size') . '" /></a></li>';
-		}
-		?>
+		<?php echo ios_app_iphoness($app); ?>
 	</div>
 	<div style="clear:left;">&nbsp;</div>
 	<?php } ?>
@@ -344,17 +319,7 @@ function ios_app_page_output($app, $download_url) {
 	<div class="app-screenshots-ipad">
 		<h2>iPad Screenshots:</h2>
 		<ul class="app-screenshots">
-		<?php
-		foreach($app->ipadScreenshotUrls as $ssurl) {
-			if(ios_app_setting('cache_images_locally') == '1')
-			{
-				$upload_dir = wp_upload_dir();
-				$ssurl = $upload_dir['baseurl'] . '/ios-app/' . $app->trackId . '/' . basename($ssurl);
-			}
-
-			echo '<li class="app-screenshot"><a href="' . $ssurl . '" alt="Full Size Screenshot"><img src="' . $ssurl . '" width="' . ios_app_setting('ss_size') . '" /></a></li>';
-		}
-		?>
+		<?php echo ios_app_ipadss($app); ?>
 	</div>
 	<div style="clear:left;">&nbsp;</div>
 	<?php }
@@ -366,6 +331,8 @@ function ios_app_page_output($app, $download_url) {
 }
 
 function ios_ap_extract_id( $atts ) {
+	if(is_object($atts)) return $atts;
+
 	extract( shortcode_atts( array(
 		'id' => ''
 	), $atts ) );
@@ -381,14 +348,6 @@ function ios_app_save_images_locally($app) {
 		return;
 	} else {
 		//Loop through screenshots and the app icons and cache everything
-		if(!is_dir($upload_dir['basedir'] . '/ios-app/' . $app->trackId)) {
-			if(!mkdir($upload_dir['basedir'] . '/ios-app/' . $app->trackId, 0755, true))
-			{
-				ios_app_set_setting('cache_images_locally', '0');
-				return;
-			}
-		}
-
 		$urls_to_cache = array();
 
 		$urls_to_cache[] = $app->artworkUrl60;
@@ -409,7 +368,11 @@ function ios_app_save_images_locally($app) {
 		foreach($urls_to_cache as $url) {
 			$content = ios_app_fopen_or_curl($url);
 
-			if($fp = fopen($upload_dir['basedir'] . '/ios-app/' . $app->trackId . '/' . basename($url), "w+"))
+			$filename = $upload_dir['basedir'] . '/ios-app/' . $app->trackId . '/' . ios_app_ss_baseurl($url);
+			$dirname = dirname($filename);
+			if (!is_dir($dirname)) mkdir($dirname, 0755, true);
+
+			if($fp = fopen($filename, "w+"))
 			{
 				fwrite($fp, $content);
 				fclose($fp);
@@ -421,6 +384,11 @@ function ios_app_save_images_locally($app) {
 			}
 		}
 	}
+}
+
+function ios_app_ss_baseurl($url) {
+	$s = explode("/", $url);
+	return implode("-", array_slice($s, -2, 2, true));
 }
 
 $app_display_page_settings = array();
