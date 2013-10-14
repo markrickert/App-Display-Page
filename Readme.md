@@ -41,3 +41,6 @@ want the data for.
 * ios_app_iphoness
 * ios_app_ipadss
 * ios_app_itunes_link
+
+---
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/markrickert/app-display-page/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
