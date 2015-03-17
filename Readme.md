@@ -1,3 +1,5 @@
+*** THIS PLUGIN IS NO LONGER SUPPORTED OR MAINTAINED ***
+
 # App Display Page
 
 This is a simple Wordpress plugin that you can 
